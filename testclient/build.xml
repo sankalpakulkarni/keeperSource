@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     May 6, 2010 11:09:17 AM                                                        
+
+     Sample Call To Web Services Demonstration    
+                   
+     mgurmend                                                                
+     ====================================================================== -->
+<project name="Sample Call To Web Services Demonstration" default="default">
+
+  <path id="libs">
+    <fileset dir="lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+	
+  <!-- - - - - - - - - - - - - - - - - - 
+       default target
+       - - - - - - - - - - - - - - - - - -->
+  <target name="default" >
+    <delete dir="classes"></delete>
+    <mkdir dir="classes"/>
+    <javac destdir="classes" srcdir="src">
+      <classpath refid="libs"></classpath>
+    </javac>
+    <java classname="tests.ServiceTests">
+      <classpath refid="libs"></classpath>
+      <classpath path="classes" ></classpath>
+    </java>
+  </target>
+
+  <!-- Clean up the compiled files -->	
+  <target name="clean">
+    <delete dir="classes"></delete>
+    <mkdir dir="classes"/>
+  </target>
+
+</project>

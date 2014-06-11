@@ -1,0 +1,43 @@
+The following are the interfaces of the KEEPER components.  For simplicity, the
+throws clauses have been omitted.
+
+interface Workflow {
+	TaskInstanceList getUserForms();
+	void submitFormTask(long keptItemId,List<VariableValue> varsValues);
+	List<Procedure> getProcedures(String stewardOrRegistrar);
+	Long createProcedure(Procedure procedure);
+	void approveProcedure(Long procedureId);
+	void rejectProcedure(Long procedureId);
+	Procedure getLatestActiveProcedure(String stewardOrRegistrar);
+	MdrProcess defaultProcess();
+	String requestAccreditRegistrar(Registrar registrar);
+	String requestAccreditActor(Contact newActor, String supervisorUsername)
+	String inquireActorRegistrationStatus(String ticket);
+	List<String> getPendingActorRegistrationDecisions();
+	String getRequestDetails(String ticket);
+	void createApprovalProcessDefinition();
+	void denyActorRequest(String ticket);
+	void approveActorRequest(String ticket);
+}
+interface Administration {
+	Long createKeptItemHeader(KeptItemHeader header);
+	long register(KeptItem admItem);
+	long registerAndUpload(KeptItem admItem,byte[] model);
+	byte[] getModel(Long keptItemId);
+	KeptItem getKeptItem(long id);
+	void changeStatus(String admItemIdStr, String newStatus);
+	void changeVisibility(String admItemIdStr, String newVisibility);
+	List<KeptItem> queryItems(String title, Date from, Date to, String status);
+}
+interface AccreditorService {
+	void createRegistrar(Registrar registrar,String tempPassword);
+	void createSteward(Steward contact,String tempPassword);
+	void createSubmitter(Submitter contact,String tempPassword);
+	void createReadOnlyUser(User contact,String tempPassword);
+	void updatePassword(String newPassword);
+	Contact authenticate(String username,String password);
+	Contact getSupervisor(String username);
+	Contact getContactInfo(String username);
+	void updatePasswordForUser(String user, String newPassword);
+	void updateContactInfo(String username, String contactInfo, String contactName, String contactTitle, String email);
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="sample_process" key="sample_process" xmlns="http://jbpm.org/4.3/jpdl">
+	<start name="startState">
+		<transition name="init" to="Fill this form" />
+	</start>
+	<task name="Fill this form" assignee='#{steward}'>
+		<transition to="Decide" />
+	</task>
+
+
+	<decision name="Decide">
+		<transition name="toEnd" to="endState">
+			<condition expr="#{someVar=='y'}" />
+		</transition>
+		<transition name="toMod" to="mod">
+			<condition expr="#{someVar=='x'}" />
+		</transition>
+	</decision>
+
+	<java name="mod" class="edu.neu.mdr.workflow.service.ChangeStateAction"
+		method="changeStatus" var="answer">
+		<arg>
+			<object expr='#{admItem}' />
+		</arg>
+		<arg>
+			<string value="standard" />
+		</arg>
+		<transition name="toEnd" to="endState" />
+	</java>
+
+
+
+	<end name="endState">
+	</end>
+
+
+</process>

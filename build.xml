@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Feb 18, 2010 12:19:01 PM                                                        
+
+     KEEPER Project
+                   
+     Maximo Gurmendez
+
+     Modified by Ken Baclawski on Sept. 10, 2013.
+     ====================================================================== -->
+<project name="KEEPER Project" default="deploytest">
+  <description>
+    KEEPER Prototype
+  </description>
+
+  <presetdef name="javac">
+    <javac includeantruntime="false" />
+  </presetdef>
+	
+  <path id="libs">
+    <fileset dir="lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+  
+  <path id="ejblibs">
+    <fileset dir="openejb/lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+  
+  <path id="alllibs">
+    <fileset dir=".">
+      <include name="openejb/lib/*.jar" />
+      <include name="lib/*.jar" />
+    </fileset>
+  </path>
+  
+  <path id="xerceslibs">
+    <fileset dir="lib/xerces">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <!-- Build KEEPER -->
+  <target name="build" depends="clean" description="KEEPER">
+    <mkdir dir="classes"/>
+    <javac destdir="classes" srcdir="src">
+      <classpath refid="alllibs" />
+    </javac>
+    
+    <copy todir="classes">
+      <fileset dir="src" includes="*.xml"/>
+      <fileset dir="resources" includes="process-template.xml"/>
+      <fileset dir="resources" includes="sample-process.xml"/>
+      <fileset dir="resources" includes="approvalprocess.jpdl.xml"/>
+    </copy>
+  </target>
+
+  <!-- Clean up the compiled files -->	
+  <target name="clean">
+    <delete dir="classes"></delete>
+    <mkdir dir="classes"/>
+    <ant dir="testclient" target="clean"/>
+  </target>
+
+  <!-- Build the test server -->
+  <target name="buildtest" depends="build">
+    <javac destdir="classes" srcdir="testserver">
+      <classpath refid="alllibs" />
+    </javac>
+
+    <copy todir="classes">
+      <fileset dir="testserver" includes="jndi.properties"/>
+      <fileset dir="testserver" includes="login.conf"/>
+    </copy>
+
+    <copy todir="classes">
+      <fileset dir="testserver" includes="META-INF/**/*.*"/>
+    </copy>
+  </target>
+
+  <!-- Deploy the test web services -->
+  <target name="deploytest" depends="build,buildtest">
+    <java classname="bean.RunWebServices" fork="true">
+      <classpath refid="alllibs"></classpath>
+      <classpath refid="xerceslibs"></classpath>
+      <classpath path="classes"></classpath>
+    </java>
+  </target>
+
+  <!-- Run a simple test client -->
+  <target name="client"> 
+    <ant antfile="build.xml" dir="testclient"/> 
+  </target> 
+
+</project>

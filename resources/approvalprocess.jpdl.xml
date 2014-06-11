@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="approvalprocess">
+	<start g="258,16,48,48" name="start1">
+		<transition g="-63,-19" name="toevaluate" to="evaluate"/>
+	</start>
+	<task assignee="#{supervisor}" g="179,205,204,52" name="evaluate">
+		<transition g="-75,-19"  to="exclusive1"/>
+	</task>
+	<end g="257,395,48,48" name="end1"/>
+	<decision g="255,302,48,48" name="exclusive1">
+		<transition g="-47,-19" name="toApproval" to="approvalNotification">
+			<condition expr="#{status==&quot;approved&quot;}"/>
+		</transition>
+      <transition g="-20,-23" name="toDenial" to="denyNotification">
+      			<condition expr="#{status!=&quot;approved&quot;}"/>
+      </transition>
+	</decision>
+	<java ejb-jndi-name="WorkflowLocal" g="385,297,159,52" method="approveActorRegistration" name="approvalNotification" var="answer">
+
+		<arg>
+			<object expr="#{ticket}"/>
+		</arg>
+		<transition g="-35,-19" name="toEnd" to="end1"/>
+	</java>
+   <java ejb-jndi-name="WorkflowLocal" g="11,300,157,52" method="denyActorRegistration" name="denyNotification" var="answer">
+		<arg>
+			<object expr="#{ticket}"/>
+		</arg>
+		<transition g="-42,1" name="toEnd" to="end1"/>
+	</java>
+    
+      
+	
+
+</process>

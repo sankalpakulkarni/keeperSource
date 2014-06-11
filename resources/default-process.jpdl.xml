@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="default-process.xml" xmlns="http://jbpm.org/4.3/jpdl">
+   <start g="252,9,48,48" name="start1">
+      <transition g="-56,-9" name="submit" to="Submits To Registry"/>
+   </start> 
+   <decision g="253,294,48,48" name="exclusive1">
+      <transition g="8,6" name="reject" to="submitterReview"/>
+      <transition g="-49,-3" name="accept" to="Registrar confirms as Qualified"/>
+   </decision>
+   <task assignee="#{steward}" g="204,202,145,52" name="Steward Checks Item">
+      <transition g="-105,-9" name="toDecisionCheck" to="exclusive1"/>
+   </task>
+   <task assignee="#{submitter}" g="448,287,145,56" name="submitterReview">
+      <transition g="10,-19" name="toSteward" to="Steward Checks Item"/>
+   </task>
+   <task g="195,114,161,52" name="Submits To Registry">
+      <transition g="-39,-13" name="check" to="Steward Checks Item"/>
+   </task>
+   <task assignee="#{registrar}" g="167,377,226,52" name="Registrar confirms as Qualified">
+      <transition g="-98,-7" name="proposeStandard" to="Steward proposes for Standard"/>
+   </task>
+   <task assignee="#{steward}" g="161,476,233,52" name="Steward proposes for Standard">
+      <transition g="-119,-9" name="requestConfirmation" to="Registrar Confirms"/>
+   </task>
+   <task assignee="#{registrar}" g="173,559,214,52" name="Registrar Confirms">
+      <transition g="-102,-11" name="toDecisionAccept" to="exclusive2"/>
+   </task>
+   <decision g="254,630,48,48" name="exclusive2">
+      <transition g="-30,-17" name="reject" to="Steward Review"/>
+      <transition g="-48,-19" name="accept" to="Standard Confirmed"/>
+   </decision>
+   <task assignee="#{steward}" g="467,625,127,52" name="Steward Review">
+      <transition g="9,-10" name="reSubmit" to="Steward proposes for Standard"/>
+   </task>
+   <task assignee="#{steward}" g="184,713,199,52" name="Standard Confirmed">
+      <transition g="88,620;88,505:-40,131" name="proposePreferedStandard" to="Steward proposes for Standard"/>
+      <transition g="-46,-19" name="end" to="end1"/>
+   </task>
+   <end g="261,807,48,48" name="end1"/>
+</process>

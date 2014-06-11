@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<process>
+	<name>process_requires_registrar_and_steward_aproval</name>
+	<startState>Steward Approval</startState>
+	<states xsi:type="formTask" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<id>0</id>
+		<name>Steward Approval</name>
+		<instructions>Dear Steward, Please approve this model by setting approveSteward=y.</instructions>
+		<transitions>
+			<id>0</id>
+			<toState>Registrar Approval</toState>
+			<transitionName>toRegistrarAproval</transitionName>
+		</transitions>
+		<asignee>steward</asignee>
+		<fields>
+			<id>0</id>
+			<length>10</length>
+			<name>approveSteward</name>
+			<type>java.lang.String</type>
+		</fields>
+	</states>
+	
+	<states xsi:type="formTask" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<id>0</id>
+		<name>Registrar Approval</name>
+		<instructions>Dear Registrar, Please approve this model by setting approveRegistrar=y.</instructions>
+		<transitions>
+			<id>0</id>
+			<toState>Decide</toState>
+			<transitionName>toDecision</transitionName>
+		</transitions>
+		<asignee>registrar</asignee>
+		<fields>
+			<id>0</id>
+			<length>10</length>
+			<name>approveRegistrar</name>
+			<type>java.lang.String</type>
+		</fields>
+	</states>
+	
+
+	<states xsi:type="decisionState" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<id>0</id>
+		<name>Decide</name>
+		<transitions xsi:type="conditionTransition">
+			<id>0</id>
+			<toState>endState</toState>
+			<transitionName>toEnd</transitionName>
+			<condition>#{approveRegistrar!='y' || approveRegistrar!='y'}</condition>
+			<!--   -->
+		</transitions>
+		<transitions xsi:type="conditionTransition">
+			<id>0</id>
+			<toState>mod</toState>
+			<transitionName>toMod</transitionName>
+			<condition>#{approveRegistrar=='y' &amp;&amp; approveSteward=='y'}</condition>
+		</transitions>
+	</states>
+	<states xsi:type="modifyStatusState" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<id>0</id>
+		<name>mod</name>
+		<transitions>
+			<id>0</id>
+			<toState>endState</toState>
+			<transitionName>toEnd</transitionName>
+		</transitions>
+		<newStatus>standard</newStatus>
+	</states>
+	<states xsi:type="endState" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<id>0</id>
+		<name>endState</name>
+	</states>
+</process>

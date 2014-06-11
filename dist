@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# Construct a zip file for distribution of the system.
+#
+rm -rf keeper keeper.zip
+mkdir keeper
+cp -r articles build.xml lib LICENSE.txt openejb README resources src testclient testserver keeper
+(cd keeper; find . -name .svn -exec rm -rf {} \; > /dev/null 2> /dev/null)
+zip -rq --encrypt keeper.zip keeper
+rm -rf keeper
+# 1KezSesr

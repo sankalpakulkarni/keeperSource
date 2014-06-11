@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<openejb>
+	<SecurityService id="HQL Security Service" provider="hqlsec#HQL Security Service"/>
+</openejb>

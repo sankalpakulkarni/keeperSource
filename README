@@ -1,0 +1,52 @@
+*******************************
+
+KEEPER PROTOTYPE IMPLEMENTATION
+
+*******************************
+
+This is a sample implementation and test client of the KEEPER system.  
+Please see the following articles:
+
+articles/KEEPER.pdf:
+"KEEPER: Knowledge Engineering Environment for Provenance and Entity Registration"
+
+articles/QualityAndGatekeepingUseCasesForOOR--KenBaclawski-MaximoGurmendez__20100401.pdf:
+"Quality and Gatekeeping Use Cases for the OOR"
+
+articles/ComponentInterfaces.txt:
+Summary of the KEEPER component interfaces
+
+Compiling, Deploying, Testing
+=============================
+
+The default ant target will build KEEPER and a stand-alone test server and then
+will deploy the server.  In Linux use the command:
+
+ant &
+
+to build the test server and run it in the background.
+
+Once this is done, the web services will be found on the following urls:
+
+http://127.0.0.1:4204/Workflow?wsdl
+http://127.0.0.1:4204/Administration?wsdl
+http://127.0.0.1:4204/Accreditor?wsdl
+
+The KEEPER service currently uses wsse:Security to authenticate, so the user
+and password are injected in the soap header. (see
+http://openejb.apache.org/securing-a-web-service.html for details.)
+
+One can test the service with a simple test client by using the ant command:
+
+ant client
+
+Configuring the Database
+========================
+
+The standalone server uses a volatile database (hsqldb).
+In order to use another database, the following files need to be changed: 
+
+jbpm.hibernate.cfg.xml (change the dialect,driver and database reference)
+persistence.xml (change the dialect. for example to org.hibernate.dialect.MySQLDialect)
+jndi.properties - add as many data sources as you want (two examples provided) and then change the
+		  data source in persistence.xml to point to the prefered datasource.

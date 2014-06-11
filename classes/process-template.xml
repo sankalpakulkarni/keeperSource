@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="${name}" key="${name}"  xmlns="http://jbpm.org/4.3/jpdl">
+   <start name="startState">
+    <transition name="init" to="${startState}"/>
+   </start>
+   <#list states as state>
+	   <#if state.class.name == "edu.neu.mdr.workflow.model.FormTask">
+	   <task name = "${state.name}" assignee='${"#{"+state.asignee+"}"}' >
+	    <#list state.transitions as transition>
+          <transition  to="${transition.toState}"/>
+           </#list>
+	   </task>
+	   </#if>
+	    <#if state.class.name == "edu.neu.mdr.workflow.model.ScriptTask">
+	   <script name="${state.name}" 
+          expr="${state.script}"
+          var="${state.name}var">   
+          <#list state.transitions as transition>
+          <transition  name="${transition.transitionName}" to="${transition.toState}"/>
+           </#list>
+  		</script>
+	   </#if>
+	   
+	    <#if state.class.name == "edu.neu.mdr.workflow.model.DecisionState">
+	   <decision name = "${state.name}">
+	    <#list state.transitions as transition>
+	    <transition  name="${transition.transitionName}" to="${transition.toState}">
+	     <condition expr = "${transition.condition}"/>
+	     </transition>
+	    </#list>
+	   </decision>
+	   </#if>
+	   <#if state.class.name == "edu.neu.mdr.workflow.model.EndState">
+	   <end name = "${state.name}">
+	   </end>
+	   </#if>
+	   
+	   	<#if state.class.name == "edu.neu.mdr.workflow.model.ModifyStatusState">
+
+			<java name="${state.name}" ejb-jndi-name="AdministrationLocal" method="changeStatus"
+				var="answer">
+		
+				<arg>
+					<object expr='${""+"#"+"{admItem}"}' />
+				</arg>
+				<arg>
+					<string value="${state.newStatus}" />
+				</arg>
+				 <#list state.transitions as transition>
+		          <transition  name="${transition.transitionName}" to="${transition.toState}"/>
+		         </#list>
+			</java>
+	   </#if>
+	   
+	   
+	    <#if state.class.name == "edu.neu.mdr.workflow.model.ChangeVisibilityState">
+
+			<java name="${state.name}" ejb-jndi-name="AdministrationLocal" method="changeVisibility"
+				var="answer">
+		
+				<arg>
+					<object expr='${""+"#"+"{admItem}"}' />
+				</arg>
+				<arg>
+					<string value="${state.newVisibility}" />
+				</arg>
+				 <#list state.transitions as transition>
+		          <transition  name="${transition.transitionName}" to="${transition.toState}"/>
+		         </#list>
+			</java>
+	   </#if>
+	   
+	  
+   
+   </#list>
+   
+ </process>

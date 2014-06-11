@@ -1,0 +1,42 @@
+<openejb-jar xmlns="http://openejb.apache.org/xml/ns/openejb-jar-2.2">
+	<enterprise-beans>
+		<session>
+			<ejb-name>Accreditor</ejb-name>
+			<web-service-security>
+				<security-realm-name></security-realm-name>
+				<transport-guarantee>NONE</transport-guarantee>
+				<auth-method>WS-SECURITY</auth-method>
+				<properties>
+					wss4j.in.action = UsernameToken
+					wss4j.in.passwordType = PasswordText
+                </properties>
+			</web-service-security>
+		</session>
+		
+		<session>
+			<ejb-name>Administration</ejb-name>
+			<web-service-security>
+				<security-realm-name></security-realm-name>
+				<transport-guarantee>NONE</transport-guarantee>
+				<auth-method>WS-SECURITY</auth-method>
+				<properties>
+					wss4j.in.action = UsernameToken
+					wss4j.in.passwordType = PasswordText
+                </properties>
+			</web-service-security>
+		</session>
+		
+		<session>
+			<ejb-name>Workflow</ejb-name>
+			<web-service-security>
+				<security-realm-name></security-realm-name>
+				<transport-guarantee>NONE</transport-guarantee>
+				<auth-method>WS-SECURITY</auth-method>
+				<properties>
+					wss4j.in.action = UsernameToken
+					wss4j.in.passwordType = PasswordText
+                </properties>
+			</web-service-security>
+		</session>
+	</enterprise-beans>
+</openejb-jar>

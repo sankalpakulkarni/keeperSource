@@ -1,0 +1,7 @@
+ <ServiceJar>
+ 	<ServiceProvider 
+ 	id="HQL Security Service" 
+ 	service="SecurityService" 
+ 	types="SecurityService"
+ 		class-name="bean.HQLServiceProvider" />
+ </ServiceJar>
